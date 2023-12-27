@@ -58,11 +58,13 @@ public class RestartAppPlugin: NSObject, FlutterPlugin {
   /// and then adds the request to the notification center.
   private func sendNotification() {
     let content = UNMutableNotificationContent()
-    content.title = "Tap to open the app!"
+    content.title = NSLocalizedString("RestartApp.Message.Noti", comment: "Noti message")
+
     content.sound = nil
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-    let request = UNNotificationRequest(identifier: "RestartApp", content: content, trigger: trigger)
+    let request = UNNotificationRequest(
+      identifier: "RestartApp", content: content, trigger: trigger)
 
     UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
   }
