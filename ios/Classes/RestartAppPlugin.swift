@@ -26,9 +26,14 @@ public class RestartAppPlugin: NSObject, FlutterPlugin {
   /// notification. Finally, it exits the app.
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if call.method == "restartApp" {
+      let argument = call.arguments as? [String: Any]
+      let let argumentValue = argument["argument"] as? String?
+
       self.requestNotificationPermissions { granted in
         if granted {
-          self.sendNotification()
+          self.sendNotification(
+            argumentValue
+          )
         }
         exit(0)
       }
@@ -56,9 +61,21 @@ public class RestartAppPlugin: NSObject, FlutterPlugin {
   ///
   /// This function sets up the notification content and trigger, creates a notification request,
   /// and then adds the request to the notification center.
-  private func sendNotification() {
+  private func sendNotification(message: String?) {
     let content = UNMutableNotificationContent()
-    content.title = NSLocalizedString("RestartApp.Message.Noti", comment: "Noti message")
+    let defaultTemplateMessage =
+      NSLocalizedString("RestartApp.Message.Noti", comment: "Noti message")
+      ?? "Tap to relaunch %@ application"
+    let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? ""
+    let defaultMessage = String(format: defaultTemplateMessage, appName)
+
+    content.title =
+      message
+      ?? defaultMessage
+
+    content.title =
+      message
+      ?? defaultMessage
 
     content.sound = nil
 
