@@ -26,12 +26,12 @@ public class RestartAppPlugin: NSObject, FlutterPlugin {
   /// notification. Finally, it exits the app.
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if call.method == "restartApp" {
-      let argument = call.arguments as? String?
+      let argument = call.arguments as? String
 
       self.requestNotificationPermissions { granted in
         if granted {
           self.sendNotification(
-            argument
+            message: argument
           )
         }
         exit(0)
