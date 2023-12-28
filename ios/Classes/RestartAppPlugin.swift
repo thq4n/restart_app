@@ -62,10 +62,15 @@ public class RestartAppPlugin: NSObject, FlutterPlugin {
   /// and then adds the request to the notification center.
   private func sendNotification(message: String?) {
     let content = UNMutableNotificationContent()
-    let defaultTemplateMessage =
+    var defaultTemplateMessage =
       NSLocalizedString("RestartApp.Message.Noti", comment: "Noti message")
-      ?? "Tap to relaunch %@ application"
-    let appName = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String ?? ""
+
+    if defaultTemplateMessage == "RestartApp.Message.Noti" {
+      // Use the localized string
+      defaultTemplateMessage = "Tap to relaunch %@ application"
+    }
+
+    let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? ""
     let defaultMessage = String(format: defaultTemplateMessage, appName)
 
     content.title =
